@@ -1,0 +1,14 @@
+syntax = "proto3";
+package verstakgit.battleship.battleship;
+
+option go_package = "github.com/verstakgit/battleship/x/battleship/types";
+
+message ExistingGames {
+  string index = 1; 
+  string playerA = 2; 
+  string playerB = 3; 
+  string gameStatus = 4; 
+  string turn = 5; 
+  
+}
+

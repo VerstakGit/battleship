@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "battleship/params.proto";
 import "battleship/next_game.proto";
+import "battleship/existing_games.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/verstakgit/battleship/x/battleship/types";
@@ -20,6 +21,16 @@ service Query {
 	rpc NextGame(QueryGetNextGameRequest) returns (QueryGetNextGameResponse) {
 		option (google.api.http).get = "/verstakgit/battleship/battleship/next_game";
 	}
+// Queries a ExistingGames by index.
+	rpc ExistingGames(QueryGetExistingGamesRequest) returns (QueryGetExistingGamesResponse) {
+		option (google.api.http).get = "/verstakgit/battleship/battleship/existing_games/{index}";
+	}
+
+	// Queries a list of ExistingGames items.
+	rpc ExistingGamesAll(QueryAllExistingGamesRequest) returns (QueryAllExistingGamesResponse) {
+		option (google.api.http).get = "/verstakgit/battleship/battleship/existing_games";
+	}
+
 // this line is used by starport scaffolding # 2
 }
 
@@ -37,4 +48,22 @@ message QueryGetNextGameRequest {}
 message QueryGetNextGameResponse {
 	NextGame NextGame = 1 [(gogoproto.nullable) = false];
 }
+message QueryGetExistingGamesRequest {
+	  string index = 1;
+
+}
+
+message QueryGetExistingGamesResponse {
+	ExistingGames existingGames = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllExistingGamesRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllExistingGamesResponse {
+	repeated ExistingGames existingGames = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 // this line is used by starport scaffolding # 3

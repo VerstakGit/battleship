@@ -4,6 +4,7 @@ package verstakgit.battleship.battleship;
 import "gogoproto/gogo.proto";
 import "battleship/params.proto";
 import "battleship/next_game.proto";
+import "battleship/existing_games.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/verstakgit/battleship/x/battleship/types";
@@ -12,5 +13,6 @@ option go_package = "github.com/verstakgit/battleship/x/battleship/types";
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   NextGame nextGame = 2;
+  repeated ExistingGames existingGamesList = 3 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }
