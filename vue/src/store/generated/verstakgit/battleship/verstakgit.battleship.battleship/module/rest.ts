@@ -9,10 +9,19 @@
  * ---------------------------------------------------------------
  */
 
+export interface BattleshipNextGame {
+  /** @format uint64 */
+  idVal?: string;
+}
+
 /**
  * Params defines the parameters for the module.
  */
 export type BattleshipParams = object;
+
+export interface BattleshipQueryGetNextGameResponse {
+  NextGame?: BattleshipNextGame;
+}
 
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
@@ -229,6 +238,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryNextGame
+   * @summary Queries a NextGame by index.
+   * @request GET:/verstakgit/battleship/battleship/next_game
+   */
+  queryNextGame = (params: RequestParams = {}) =>
+    this.request<BattleshipQueryGetNextGameResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/next_game`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

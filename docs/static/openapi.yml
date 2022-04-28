@@ -28270,6 +28270,42 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /verstakgit/battleship/battleship/next_game:
+    get:
+      summary: Queries a NextGame by index.
+      operationId: VerstakgitBattleshipBattleshipNextGame
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              NextGame:
+                type: object
+                properties:
+                  idVal:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /verstakgit/battleship/battleship/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -48502,9 +48538,24 @@ definitions:
     title: >-
       SignatureCounts contains information about signature reporting for a
       number of blocks
+  verstakgit.battleship.battleship.NextGame:
+    type: object
+    properties:
+      idVal:
+        type: string
+        format: uint64
   verstakgit.battleship.battleship.Params:
     type: object
     description: Params defines the parameters for the module.
+  verstakgit.battleship.battleship.QueryGetNextGameResponse:
+    type: object
+    properties:
+      NextGame:
+        type: object
+        properties:
+          idVal:
+            type: string
+            format: uint64
   verstakgit.battleship.battleship.QueryParamsResponse:
     type: object
     properties:
