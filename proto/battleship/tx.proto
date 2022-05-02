@@ -9,6 +9,7 @@ option go_package = "github.com/verstakgit/battleship/x/battleship/types";
 service Msg {
       rpc CreateGame(MsgCreateGame) returns (MsgCreateGameResponse);
   rpc SetField(MsgSetField) returns (MsgSetFieldResponse);
+  rpc Fire(MsgFire) returns (MsgFireResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -28,6 +29,16 @@ message MsgSetField {
 }
 
 message MsgSetFieldResponse {
+}
+
+message MsgFire {
+  string creator = 1;
+  uint64 x = 2;
+  uint64 y = 3;
+}
+
+message MsgFireResponse {
+  string status = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

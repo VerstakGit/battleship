@@ -48739,6 +48739,11 @@ definitions:
     properties:
       idVal:
         type: string
+  verstakgit.battleship.battleship.MsgFireResponse:
+    type: object
+    properties:
+      status:
+        type: string
   verstakgit.battleship.battleship.MsgSetFieldResponse:
     type: object
   verstakgit.battleship.battleship.NextGame:

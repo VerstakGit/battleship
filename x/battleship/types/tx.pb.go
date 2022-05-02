@@ -219,36 +219,146 @@ func (m *MsgSetFieldResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSetFieldResponse proto.InternalMessageInfo
 
+type MsgFire struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	X       uint64 `protobuf:"varint,2,opt,name=x,proto3" json:"x,omitempty"`
+	Y       uint64 `protobuf:"varint,3,opt,name=y,proto3" json:"y,omitempty"`
+}
+
+func (m *MsgFire) Reset()         { *m = MsgFire{} }
+func (m *MsgFire) String() string { return proto.CompactTextString(m) }
+func (*MsgFire) ProtoMessage()    {}
+func (*MsgFire) Descriptor() ([]byte, []int) {
+	return fileDescriptor_10ffa1ff856169bc, []int{4}
+}
+func (m *MsgFire) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFire) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFire.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFire) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFire.Merge(m, src)
+}
+func (m *MsgFire) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFire) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFire.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFire proto.InternalMessageInfo
+
+func (m *MsgFire) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgFire) GetX() uint64 {
+	if m != nil {
+		return m.X
+	}
+	return 0
+}
+
+func (m *MsgFire) GetY() uint64 {
+	if m != nil {
+		return m.Y
+	}
+	return 0
+}
+
+type MsgFireResponse struct {
+	Status string `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+}
+
+func (m *MsgFireResponse) Reset()         { *m = MsgFireResponse{} }
+func (m *MsgFireResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgFireResponse) ProtoMessage()    {}
+func (*MsgFireResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_10ffa1ff856169bc, []int{5}
+}
+func (m *MsgFireResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFireResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFireResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFireResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFireResponse.Merge(m, src)
+}
+func (m *MsgFireResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFireResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFireResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFireResponse proto.InternalMessageInfo
+
+func (m *MsgFireResponse) GetStatus() string {
+	if m != nil {
+		return m.Status
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*MsgCreateGame)(nil), "verstakgit.battleship.battleship.MsgCreateGame")
 	proto.RegisterType((*MsgCreateGameResponse)(nil), "verstakgit.battleship.battleship.MsgCreateGameResponse")
 	proto.RegisterType((*MsgSetField)(nil), "verstakgit.battleship.battleship.MsgSetField")
 	proto.RegisterType((*MsgSetFieldResponse)(nil), "verstakgit.battleship.battleship.MsgSetFieldResponse")
+	proto.RegisterType((*MsgFire)(nil), "verstakgit.battleship.battleship.MsgFire")
+	proto.RegisterType((*MsgFireResponse)(nil), "verstakgit.battleship.battleship.MsgFireResponse")
 }
 
 func init() { proto.RegisterFile("battleship/tx.proto", fileDescriptor_10ffa1ff856169bc) }
 
 var fileDescriptor_10ffa1ff856169bc = []byte{
-	// 289 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0x4a, 0x2c, 0x29,
-	0xc9, 0x49, 0x2d, 0xce, 0xc8, 0x2c, 0xd0, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0x52, 0x28, 0x4b, 0x2d, 0x2a, 0x2e, 0x49, 0xcc, 0x4e, 0xcf, 0x2c, 0xd1, 0x43, 0xc8, 0x23, 0x31,
-	0x95, 0x5c, 0xb9, 0x78, 0x7d, 0x8b, 0xd3, 0x9d, 0x8b, 0x52, 0x13, 0x4b, 0x52, 0xdd, 0x13, 0x73,
-	0x53, 0x85, 0x24, 0xb8, 0xd8, 0x93, 0x41, 0xbc, 0xfc, 0x22, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce,
-	0x20, 0x18, 0x57, 0x48, 0x8a, 0x8b, 0x23, 0xbf, 0xa0, 0x20, 0x3f, 0x2f, 0x35, 0xaf, 0x44, 0x82,
-	0x09, 0x2c, 0x05, 0xe7, 0x2b, 0xe9, 0x72, 0x89, 0xa2, 0x18, 0x13, 0x94, 0x5a, 0x5c, 0x90, 0x9f,
-	0x57, 0x9c, 0x2a, 0x24, 0xc2, 0xc5, 0x9a, 0x99, 0x12, 0x96, 0x98, 0x03, 0x35, 0x0c, 0xc2, 0x51,
-	0x0a, 0xe6, 0xe2, 0xf6, 0x2d, 0x4e, 0x0f, 0x4e, 0x2d, 0x71, 0xcb, 0x4c, 0xcd, 0x49, 0xc1, 0x63,
-	0x27, 0x5c, 0x3b, 0x13, 0x92, 0x76, 0x90, 0x68, 0x1a, 0x48, 0xa3, 0x04, 0x33, 0x44, 0x14, 0xcc,
-	0x51, 0x12, 0xe5, 0x12, 0x46, 0x32, 0x14, 0xe6, 0x02, 0xa3, 0xf7, 0x8c, 0x5c, 0xcc, 0xbe, 0xc5,
-	0xe9, 0x42, 0x65, 0x5c, 0x5c, 0x48, 0xde, 0xd4, 0xd7, 0x23, 0x14, 0x34, 0x7a, 0x28, 0x1e, 0x92,
-	0x32, 0x27, 0x51, 0x03, 0x3c, 0x04, 0x0a, 0xb8, 0x38, 0xe0, 0x1e, 0xd5, 0x25, 0xca, 0x10, 0x98,
-	0x72, 0x29, 0x53, 0x92, 0x94, 0xc3, 0x6c, 0x74, 0xf2, 0x3d, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23,
-	0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6,
-	0x63, 0x39, 0x86, 0x28, 0xe3, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d,
-	0x84, 0xd1, 0xfa, 0x48, 0x49, 0xa7, 0x02, 0x99, 0x53, 0x52, 0x59, 0x90, 0x5a, 0x9c, 0xc4, 0x06,
-	0x4e, 0x4b, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x89, 0xb0, 0xcb, 0x63, 0x62, 0x02, 0x00,
-	0x00,
+	// 354 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0xb1, 0x4f, 0xfa, 0x40,
+	0x14, 0xc7, 0x39, 0xe0, 0x07, 0xfc, 0x9e, 0x1a, 0x93, 0x22, 0xa6, 0xe9, 0xd0, 0x90, 0x4e, 0x32,
+	0xd0, 0x46, 0x89, 0x71, 0x34, 0xd1, 0x88, 0x53, 0x97, 0x92, 0x38, 0xb8, 0x15, 0x38, 0x4b, 0x23,
+	0x70, 0x97, 0xde, 0x83, 0x94, 0xff, 0xc2, 0x3f, 0xcb, 0x91, 0xc5, 0xc4, 0xd1, 0xc0, 0x3f, 0x62,
+	0x5a, 0xda, 0xe3, 0x58, 0x10, 0xb6, 0x7e, 0xee, 0xde, 0xf7, 0xf3, 0xee, 0x5e, 0x73, 0x50, 0xef,
+	0xfb, 0x88, 0x63, 0x2a, 0x46, 0x21, 0x77, 0x30, 0xb6, 0x79, 0xc4, 0x90, 0x69, 0xcd, 0x39, 0x8d,
+	0x04, 0xfa, 0xef, 0x41, 0x88, 0xf6, 0x76, 0x5f, 0xf9, 0xb4, 0x9e, 0xe0, 0xcc, 0x15, 0xc1, 0x63,
+	0x44, 0x7d, 0xa4, 0xcf, 0xfe, 0x84, 0x6a, 0x3a, 0x54, 0x07, 0x09, 0xb1, 0x48, 0x27, 0x4d, 0x72,
+	0xf5, 0xdf, 0xcb, 0x51, 0x33, 0xa0, 0xc6, 0x38, 0x67, 0x53, 0x3a, 0x45, 0xbd, 0x98, 0x6e, 0x49,
+	0xb6, 0xda, 0xd0, 0xd8, 0xd1, 0x78, 0x54, 0x70, 0x36, 0x15, 0x54, 0xbb, 0x80, 0x7f, 0xe1, 0xf0,
+	0xc5, 0x1f, 0x67, 0xb2, 0x0d, 0x58, 0x3d, 0x38, 0x71, 0x45, 0xd0, 0xa3, 0xd8, 0x0d, 0xe9, 0x78,
+	0xb8, 0xa7, 0xa7, 0x8c, 0x17, 0x95, 0x78, 0xb2, 0xfa, 0x96, 0x04, 0xf5, 0xd2, 0x66, 0x35, 0x05,
+	0xab, 0x01, 0x75, 0x45, 0x9a, 0x9f, 0xc0, 0xba, 0x87, 0xaa, 0x2b, 0x82, 0x6e, 0x18, 0xed, 0xbb,
+	0xdb, 0x29, 0x90, 0x38, 0xed, 0x51, 0xf6, 0x48, 0x9c, 0xd0, 0x22, 0x75, 0x97, 0x3d, 0xb2, 0xb0,
+	0x5a, 0x70, 0x9e, 0x09, 0xe4, 0xad, 0x2e, 0xa1, 0x22, 0xd0, 0xc7, 0x99, 0xc8, 0x3c, 0x19, 0xdd,
+	0x7c, 0x15, 0xa1, 0xe4, 0x8a, 0x40, 0x9b, 0x03, 0x28, 0x23, 0x75, 0xec, 0xbf, 0x7e, 0x83, 0xbd,
+	0x33, 0x3c, 0xe3, 0xee, 0xc8, 0x80, 0x3c, 0x17, 0x87, 0x9a, 0x1c, 0x6a, 0xfb, 0x20, 0x49, 0x5e,
+	0x6e, 0xdc, 0x1e, 0x55, 0x2e, 0x3b, 0x0e, 0xa1, 0x9c, 0x8e, 0xb6, 0x75, 0x50, 0x3c, 0x29, 0x35,
+	0xae, 0x0f, 0x2e, 0xcd, 0xbb, 0x3c, 0xb8, 0x9f, 0x2b, 0x93, 0x2c, 0x57, 0x26, 0xf9, 0x59, 0x99,
+	0xe4, 0x63, 0x6d, 0x16, 0x96, 0x6b, 0xb3, 0xf0, 0xbd, 0x36, 0x0b, 0xaf, 0x9d, 0x20, 0xc4, 0xd1,
+	0xac, 0x6f, 0x0f, 0xd8, 0xc4, 0xd9, 0x6a, 0x1d, 0xe5, 0x31, 0xc4, 0x2a, 0xe0, 0x82, 0x53, 0xd1,
+	0xaf, 0xa4, 0xaf, 0xa3, 0xf3, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x63, 0xe5, 0x77, 0x6a, 0x34, 0x03,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -265,6 +375,7 @@ const _ = grpc.SupportPackageIsVersion4
 type MsgClient interface {
 	CreateGame(ctx context.Context, in *MsgCreateGame, opts ...grpc.CallOption) (*MsgCreateGameResponse, error)
 	SetField(ctx context.Context, in *MsgSetField, opts ...grpc.CallOption) (*MsgSetFieldResponse, error)
+	Fire(ctx context.Context, in *MsgFire, opts ...grpc.CallOption) (*MsgFireResponse, error)
 }
 
 type msgClient struct {
@@ -293,10 +404,20 @@ func (c *msgClient) SetField(ctx context.Context, in *MsgSetField, opts ...grpc.
 	return out, nil
 }
 
+func (c *msgClient) Fire(ctx context.Context, in *MsgFire, opts ...grpc.CallOption) (*MsgFireResponse, error) {
+	out := new(MsgFireResponse)
+	err := c.cc.Invoke(ctx, "/verstakgit.battleship.battleship.Msg/Fire", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreateGame(context.Context, *MsgCreateGame) (*MsgCreateGameResponse, error)
 	SetField(context.Context, *MsgSetField) (*MsgSetFieldResponse, error)
+	Fire(context.Context, *MsgFire) (*MsgFireResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -308,6 +429,9 @@ func (*UnimplementedMsgServer) CreateGame(ctx context.Context, req *MsgCreateGam
 }
 func (*UnimplementedMsgServer) SetField(ctx context.Context, req *MsgSetField) (*MsgSetFieldResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetField not implemented")
+}
+func (*UnimplementedMsgServer) Fire(ctx context.Context, req *MsgFire) (*MsgFireResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Fire not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -350,6 +474,24 @@ func _Msg_SetField_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Fire_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFire)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Fire(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/verstakgit.battleship.battleship.Msg/Fire",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Fire(ctx, req.(*MsgFire))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "verstakgit.battleship.battleship.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -361,6 +503,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetField",
 			Handler:    _Msg_SetField_Handler,
+		},
+		{
+			MethodName: "Fire",
+			Handler:    _Msg_Fire_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -501,6 +647,76 @@ func (m *MsgSetFieldResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgFire) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFire) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFire) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Y != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Y))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.X != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.X))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFireResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFireResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFireResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Status) > 0 {
+		i -= len(m.Status)
+		copy(dAtA[i:], m.Status)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Status)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -569,6 +785,38 @@ func (m *MsgSetFieldResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgFire) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.X != 0 {
+		n += 1 + sovTx(uint64(m.X))
+	}
+	if m.Y != 0 {
+		n += 1 + sovTx(uint64(m.Y))
+	}
+	return n
+}
+
+func (m *MsgFireResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Status)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	return n
 }
 
@@ -949,6 +1197,208 @@ func (m *MsgSetFieldResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgSetFieldResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFire) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFire: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFire: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field X", wireType)
+			}
+			m.X = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.X |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Y", wireType)
+			}
+			m.Y = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Y |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFireResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFireResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFireResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Status = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
