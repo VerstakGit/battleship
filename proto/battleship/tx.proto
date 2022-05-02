@@ -8,6 +8,7 @@ option go_package = "github.com/verstakgit/battleship/x/battleship/types";
 // Msg defines the Msg service.
 service Msg {
       rpc CreateGame(MsgCreateGame) returns (MsgCreateGameResponse);
+  rpc SetField(MsgSetField) returns (MsgSetFieldResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -18,6 +19,15 @@ message MsgCreateGame {
 
 message MsgCreateGameResponse {
   string idVal = 1;
+}
+
+message MsgSetField {
+  string creator = 1;
+  string idVal = 2;
+  string field = 3;
+}
+
+message MsgSetFieldResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

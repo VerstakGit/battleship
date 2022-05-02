@@ -22,6 +22,8 @@ export interface BattleshipMsgCreateGameResponse {
   idVal?: string;
 }
 
+export type BattleshipMsgSetFieldResponse = object;
+
 export interface BattleshipNextGame {
   /** @format uint64 */
   idVal?: string;
