@@ -7,7 +7,8 @@ export interface ExistingGames {
   index: string;
   playerA: string;
   playerB: string;
-  gameStatus: string;
+  fieldA: string;
+  fieldB: string;
   turn: string;
 }
 
@@ -15,7 +16,8 @@ const baseExistingGames: object = {
   index: "",
   playerA: "",
   playerB: "",
-  gameStatus: "",
+  fieldA: "",
+  fieldB: "",
   turn: "",
 };
 
@@ -30,11 +32,14 @@ export const ExistingGames = {
     if (message.playerB !== "") {
       writer.uint32(26).string(message.playerB);
     }
-    if (message.gameStatus !== "") {
-      writer.uint32(34).string(message.gameStatus);
+    if (message.fieldA !== "") {
+      writer.uint32(34).string(message.fieldA);
+    }
+    if (message.fieldB !== "") {
+      writer.uint32(42).string(message.fieldB);
     }
     if (message.turn !== "") {
-      writer.uint32(42).string(message.turn);
+      writer.uint32(50).string(message.turn);
     }
     return writer;
   },
@@ -56,9 +61,12 @@ export const ExistingGames = {
           message.playerB = reader.string();
           break;
         case 4:
-          message.gameStatus = reader.string();
+          message.fieldA = reader.string();
           break;
         case 5:
+          message.fieldB = reader.string();
+          break;
+        case 6:
           message.turn = reader.string();
           break;
         default:
@@ -86,10 +94,15 @@ export const ExistingGames = {
     } else {
       message.playerB = "";
     }
-    if (object.gameStatus !== undefined && object.gameStatus !== null) {
-      message.gameStatus = String(object.gameStatus);
+    if (object.fieldA !== undefined && object.fieldA !== null) {
+      message.fieldA = String(object.fieldA);
     } else {
-      message.gameStatus = "";
+      message.fieldA = "";
+    }
+    if (object.fieldB !== undefined && object.fieldB !== null) {
+      message.fieldB = String(object.fieldB);
+    } else {
+      message.fieldB = "";
     }
     if (object.turn !== undefined && object.turn !== null) {
       message.turn = String(object.turn);
@@ -104,7 +117,8 @@ export const ExistingGames = {
     message.index !== undefined && (obj.index = message.index);
     message.playerA !== undefined && (obj.playerA = message.playerA);
     message.playerB !== undefined && (obj.playerB = message.playerB);
-    message.gameStatus !== undefined && (obj.gameStatus = message.gameStatus);
+    message.fieldA !== undefined && (obj.fieldA = message.fieldA);
+    message.fieldB !== undefined && (obj.fieldB = message.fieldB);
     message.turn !== undefined && (obj.turn = message.turn);
     return obj;
   },
@@ -126,10 +140,15 @@ export const ExistingGames = {
     } else {
       message.playerB = "";
     }
-    if (object.gameStatus !== undefined && object.gameStatus !== null) {
-      message.gameStatus = object.gameStatus;
+    if (object.fieldA !== undefined && object.fieldA !== null) {
+      message.fieldA = object.fieldA;
     } else {
-      message.gameStatus = "";
+      message.fieldA = "";
+    }
+    if (object.fieldB !== undefined && object.fieldB !== null) {
+      message.fieldB = object.fieldB;
+    } else {
+      message.fieldB = "";
     }
     if (object.turn !== undefined && object.turn !== null) {
       message.turn = object.turn;

@@ -7,7 +7,17 @@ option go_package = "github.com/verstakgit/battleship/x/battleship/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc CreateGame(MsgCreateGame) returns (MsgCreateGameResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateGame {
+  string creator = 1;
+  string opponent = 2;
+}
+
+message MsgCreateGameResponse {
+  string idVal = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

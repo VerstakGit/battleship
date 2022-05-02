@@ -28291,7 +28291,9 @@ paths:
                       type: string
                     playerB:
                       type: string
-                    gameStatus:
+                    fieldA:
+                      type: string
+                    fieldB:
                       type: string
                     turn:
                       type: string
@@ -28418,7 +28420,9 @@ paths:
                     type: string
                   playerB:
                     type: string
-                  gameStatus:
+                  fieldA:
+                    type: string
+                  fieldB:
                     type: string
                   turn:
                     type: string
@@ -48724,9 +48728,16 @@ definitions:
         type: string
       playerB:
         type: string
-      gameStatus:
+      fieldA:
+        type: string
+      fieldB:
         type: string
       turn:
+        type: string
+  verstakgit.battleship.battleship.MsgCreateGameResponse:
+    type: object
+    properties:
+      idVal:
         type: string
   verstakgit.battleship.battleship.NextGame:
     type: object
@@ -48751,7 +48762,9 @@ definitions:
               type: string
             playerB:
               type: string
-            gameStatus:
+            fieldA:
+              type: string
+            fieldB:
               type: string
             turn:
               type: string
@@ -48792,7 +48805,9 @@ definitions:
             type: string
           playerB:
             type: string
-          gameStatus:
+          fieldA:
+            type: string
+          fieldB:
             type: string
           turn:
             type: string

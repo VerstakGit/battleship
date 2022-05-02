@@ -7,8 +7,9 @@ message ExistingGames {
   string index = 1; 
   string playerA = 2; 
   string playerB = 3; 
-  string gameStatus = 4; 
-  string turn = 5; 
+  string fieldA = 4;
+  string fieldB = 5;
+  string turn = 6;
   
 }
 

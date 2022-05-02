@@ -13,8 +13,13 @@ export interface BattleshipExistingGames {
   index?: string;
   playerA?: string;
   playerB?: string;
-  gameStatus?: string;
+  fieldA?: string;
+  fieldB?: string;
   turn?: string;
+}
+
+export interface BattleshipMsgCreateGameResponse {
+  idVal?: string;
 }
 
 export interface BattleshipNextGame {
