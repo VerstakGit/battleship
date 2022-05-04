@@ -48744,6 +48744,10 @@ definitions:
     properties:
       status:
         type: string
+      win:
+        type: boolean
+      opponentField:
+        type: string
   verstakgit.battleship.battleship.MsgSetFieldResponse:
     type: object
   verstakgit.battleship.battleship.NextGame:

@@ -24,6 +24,8 @@ export interface BattleshipMsgCreateGameResponse {
 
 export interface BattleshipMsgFireResponse {
   status?: string;
+  win?: boolean;
+  opponentField?: string;
 }
 
 export type BattleshipMsgSetFieldResponse = object;

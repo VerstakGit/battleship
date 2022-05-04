@@ -19,11 +19,11 @@ func CmdFire() *cobra.Command {
 		Short: "Broadcast message fire",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argX, err := cast.ToUint64E(args[0])
+			argX, err := cast.ToInt64E(args[0])
 			if err != nil {
 				return err
 			}
-			argY, err := cast.ToUint64E(args[1])
+			argY, err := cast.ToInt64E(args[1])
 			if err != nil {
 				return err
 			}

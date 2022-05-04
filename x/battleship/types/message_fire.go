@@ -9,7 +9,7 @@ const TypeMsgFire = "fire"
 
 var _ sdk.Msg = &MsgFire{}
 
-func NewMsgFire(creator string, x uint64, y uint64) *MsgFire {
+func NewMsgFire(creator string, x int64, y int64) *MsgFire {
 	return &MsgFire{
 		Creator: creator,
 		X:       x,

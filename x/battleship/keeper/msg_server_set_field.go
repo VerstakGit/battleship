@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/verstakgit/battleship/x/battleship/rules"
 	"github.com/verstakgit/battleship/x/battleship/types"
 )
@@ -17,7 +16,7 @@ func (k msgServer) SetField(goCtx context.Context, msg *types.MsgSetField) (*typ
 	}
 
 	if err := rules.ValidateInitialField(msg.Field); err != nil {
-		return nil, sdkerrors.Wrap(err, types.ErrIncorrectGameField.Error())
+		return nil, err
 	}
 
 	switch {

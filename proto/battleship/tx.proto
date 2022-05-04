@@ -33,12 +33,15 @@ message MsgSetFieldResponse {
 
 message MsgFire {
   string creator = 1;
-  uint64 x = 2;
-  uint64 y = 3;
+  int64 x = 2;
+  int64 y = 3;
+  string gameId = 4;
 }
 
 message MsgFireResponse {
   string status = 1;
+  bool win = 2;
+  string opponentField = 3;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

@@ -61,3 +61,32 @@ func (k Keeper) GetAllExistingGames(ctx sdk.Context) (list []types.ExistingGames
 
 	return
 }
+
+func getOpponentField(game *types.ExistingGames, creator string) string {
+	switch creator {
+	case game.PlayerA:
+		return game.FieldB
+	case game.PlayerB:
+		return game.FieldA
+	}
+	return ""
+}
+
+func setOpponentField(game *types.ExistingGames, creator, field string) {
+	switch creator {
+	case game.PlayerA:
+		game.FieldB = field
+	case game.PlayerB:
+		game.FieldA = field
+	}
+}
+
+func getOpponent(game *types.ExistingGames, creator string) string {
+	switch creator {
+	case game.PlayerA:
+		return game.PlayerB
+	case game.PlayerB:
+		return game.PlayerA
+	}
+	return ""
+}

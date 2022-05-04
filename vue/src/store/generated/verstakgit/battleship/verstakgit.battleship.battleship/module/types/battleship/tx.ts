@@ -25,10 +25,13 @@ export interface MsgFire {
   creator: string;
   x: number;
   y: number;
+  gameId: string;
 }
 
 export interface MsgFireResponse {
   status: string;
+  win: boolean;
+  opponentField: string;
 }
 
 const baseMsgCreateGame: object = { creator: "", opponent: "" };
@@ -290,7 +293,7 @@ export const MsgSetFieldResponse = {
   },
 };
 
-const baseMsgFire: object = { creator: "", x: 0, y: 0 };
+const baseMsgFire: object = { creator: "", x: 0, y: 0, gameId: "" };
 
 export const MsgFire = {
   encode(message: MsgFire, writer: Writer = Writer.create()): Writer {
@@ -298,10 +301,13 @@ export const MsgFire = {
       writer.uint32(10).string(message.creator);
     }
     if (message.x !== 0) {
-      writer.uint32(16).uint64(message.x);
+      writer.uint32(16).int64(message.x);
     }
     if (message.y !== 0) {
-      writer.uint32(24).uint64(message.y);
+      writer.uint32(24).int64(message.y);
+    }
+    if (message.gameId !== "") {
+      writer.uint32(34).string(message.gameId);
     }
     return writer;
   },
@@ -317,10 +323,13 @@ export const MsgFire = {
           message.creator = reader.string();
           break;
         case 2:
-          message.x = longToNumber(reader.uint64() as Long);
+          message.x = longToNumber(reader.int64() as Long);
           break;
         case 3:
-          message.y = longToNumber(reader.uint64() as Long);
+          message.y = longToNumber(reader.int64() as Long);
+          break;
+        case 4:
+          message.gameId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -347,6 +356,11 @@ export const MsgFire = {
     } else {
       message.y = 0;
     }
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = String(object.gameId);
+    } else {
+      message.gameId = "";
+    }
     return message;
   },
 
@@ -355,6 +369,7 @@ export const MsgFire = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.x !== undefined && (obj.x = message.x);
     message.y !== undefined && (obj.y = message.y);
+    message.gameId !== undefined && (obj.gameId = message.gameId);
     return obj;
   },
 
@@ -375,16 +390,31 @@ export const MsgFire = {
     } else {
       message.y = 0;
     }
+    if (object.gameId !== undefined && object.gameId !== null) {
+      message.gameId = object.gameId;
+    } else {
+      message.gameId = "";
+    }
     return message;
   },
 };
 
-const baseMsgFireResponse: object = { status: "" };
+const baseMsgFireResponse: object = {
+  status: "",
+  win: false,
+  opponentField: "",
+};
 
 export const MsgFireResponse = {
   encode(message: MsgFireResponse, writer: Writer = Writer.create()): Writer {
     if (message.status !== "") {
       writer.uint32(10).string(message.status);
+    }
+    if (message.win === true) {
+      writer.uint32(16).bool(message.win);
+    }
+    if (message.opponentField !== "") {
+      writer.uint32(26).string(message.opponentField);
     }
     return writer;
   },
@@ -398,6 +428,12 @@ export const MsgFireResponse = {
       switch (tag >>> 3) {
         case 1:
           message.status = reader.string();
+          break;
+        case 2:
+          message.win = reader.bool();
+          break;
+        case 3:
+          message.opponentField = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -414,12 +450,25 @@ export const MsgFireResponse = {
     } else {
       message.status = "";
     }
+    if (object.win !== undefined && object.win !== null) {
+      message.win = Boolean(object.win);
+    } else {
+      message.win = false;
+    }
+    if (object.opponentField !== undefined && object.opponentField !== null) {
+      message.opponentField = String(object.opponentField);
+    } else {
+      message.opponentField = "";
+    }
     return message;
   },
 
   toJSON(message: MsgFireResponse): unknown {
     const obj: any = {};
     message.status !== undefined && (obj.status = message.status);
+    message.win !== undefined && (obj.win = message.win);
+    message.opponentField !== undefined &&
+      (obj.opponentField = message.opponentField);
     return obj;
   },
 
@@ -429,6 +478,16 @@ export const MsgFireResponse = {
       message.status = object.status;
     } else {
       message.status = "";
+    }
+    if (object.win !== undefined && object.win !== null) {
+      message.win = object.win;
+    } else {
+      message.win = false;
+    }
+    if (object.opponentField !== undefined && object.opponentField !== null) {
+      message.opponentField = object.opponentField;
+    } else {
+      message.opponentField = "";
     }
     return message;
   },
