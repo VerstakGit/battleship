@@ -19,6 +19,7 @@ const (
 	maximumShipLen = 4
 	missStatus     = "miss"
 	HitStatus      = "hit"
+	KillStatus     = "kill"
 )
 
 const (
@@ -59,12 +60,8 @@ var (
 
 func ValidateInitialField(fieldStr string) error {
 	curShipsCnt := make(map[int]int, len(shipsCnt))
-	field := make([][]byte, 0, fieldSize)
-	for i, row := range strings.Split(fieldStr, newLine) {
-		field = append(field, make([]byte, 0, fieldSize))
-		for _, s := range strings.Split(row, "") {
-			field[i] = append(field[i], s[0])
-		}
+	field := transformFieldStrToArr(fieldStr)
+	for i := range field {
 		if len(field[i]) != fieldSize {
 			return types.ErrInvalidFieldSize
 		}
@@ -115,8 +112,7 @@ func countShipLen(field [][]byte, i, j int) (int, error) {
 		field[i][j] = emptyCell
 		for _, d := range possibleDirections {
 			newI, newJ := i+d[0], j+d[1]
-			// out of bounds
-			if newI < 0 || newI >= len(field) || newJ < 0 || newJ >= len(field[0]) {
+			if outOfBounds(field, newI, newJ) {
 				continue
 			}
 			if field[newI][newJ] != shipCell {
@@ -165,14 +161,105 @@ func Fire(fieldStr string, i, j int) (string, *types.MsgFireResponse, error) {
 	case missCell, hitCell, killCell:
 		return "", nil, types.ErrCantFireInTheSamePlace
 	case shipCell:
-		// TODO: ship hit
+		resField, status := damageShip(fieldStr, i, j)
+		resp.Status = status
+		resp.Win = strings.Index(resField, string(shipCell)) == -1
+		return resField, resp, nil
 	}
 
 	return "", nil, types.ErrUnknownCell
 }
 
-func TransformToOpponentField(field string) string {
-	// TODO: transform
+func damageShip(fieldStr string, i, j int) (string, string) {
+	field := transformFieldStrToArr(fieldStr)
 
+	field[i][j] = hitCell
+	q := make([][]int, 0)
+	q = append(q, []int{i, j})
+	for idx := 0; idx < len(q); idx++ {
+		i, j := q[idx][0], q[idx][1]
+		for _, d := range allowedDirections {
+			newI, newJ := i+d[0], j+d[1]
+			if outOfBounds(field, newI, newJ) {
+				continue
+			}
+			cell := field[newI][newJ]
+			if cell != shipCell || cell != hitCell {
+				continue
+			}
+
+			if cell == shipCell {
+				return transformFieldArrToStr(field), HitStatus
+			}
+
+			q = append(q, []int{newI, newJ})
+		}
+	}
+
+	// all near cells are hit cells
+	for _, cell := range q {
+		field[cell[0]][cell[1]] = killCell
+	}
+
+	return transformFieldArrToStr(field), KillStatus
+}
+
+func outOfBounds(field [][]byte, newI, newJ int) bool {
+	return newI < 0 || newI >= len(field) || newJ < 0 || newJ >= len(field[0])
+}
+
+func TransformToOpponentField(fieldStr string) string {
+	field := transformFieldStrToArr(fieldStr)
+	for i := range field {
+		for j := range field[i] {
+			if field[i][j] == shipCell || field[i][j] == emptyCell {
+				field[i][j] = unknownCell
+			}
+		}
+	}
+
+	for i := range field {
+		for j := range field[i] {
+			if field[i][j] != killCell {
+				continue
+			}
+
+			for _, d := range possibleDirections {
+				newI, newJ := i+d[0], j+d[1]
+				if outOfBounds(field, newI, newJ) {
+					continue
+				}
+
+				if field[newI][newJ] == unknownCell {
+					field[newI][newJ] = emptyCell
+				}
+			}
+		}
+	}
+
+	return transformFieldArrToStr(field)
+}
+
+func transformFieldStrToArr(fieldStr string) [][]byte {
+	field := make([][]byte, 0, fieldSize)
+	for i, row := range strings.Split(fieldStr, newLine) {
+		field = append(field, make([]byte, 0, fieldSize))
+		for _, s := range strings.Split(row, "") {
+			field[i] = append(field[i], s[0])
+		}
+	}
 	return field
+}
+
+func transformFieldArrToStr(field [][]byte) string {
+	fieldStr := ""
+	for i, row := range field {
+		for _, symbol := range row {
+			fieldStr += string(symbol)
+		}
+		if i+1 != len(field) {
+			fieldStr += newLine
+		}
+	}
+	return fieldStr
 }

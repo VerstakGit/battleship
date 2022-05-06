@@ -16,6 +16,10 @@ func (k msgServer) Fire(goCtx context.Context, msg *types.MsgFire) (*types.MsgFi
 		return nil, types.ErrCantFindGameById
 	}
 
+	if game.FieldA == "" || game.FieldB == "" {
+		return nil, types.ErrPlayerFieldIsEmpty
+	}
+
 	if game.Turn != msg.Creator {
 		return nil, types.ErrItIsNotYourTurn
 	}
@@ -26,7 +30,7 @@ func (k msgServer) Fire(goCtx context.Context, msg *types.MsgFire) (*types.MsgFi
 	}
 
 	setOpponentField(&game, msg.Creator, field)
-	if resp.Status != rules.HitStatus {
+	if resp.Status != rules.HitStatus && resp.Status != rules.KillStatus {
 		game.Turn = getOpponent(&game, msg.Creator)
 	}
 	k.Keeper.SetExistingGames(ctx, game)
