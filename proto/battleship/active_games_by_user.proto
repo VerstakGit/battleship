@@ -3,13 +3,9 @@ package verstakgit.battleship.battleship;
 
 option go_package = "github.com/verstakgit/battleship/x/battleship/types";
 
-message ExistingGames {
+message ActiveGamesByUser {
   string index = 1; 
-  string playerA = 2; 
-  string playerB = 3; 
-  string fieldA = 4;
-  string fieldB = 5;
-  string turn = 6;
-  bool ended = 7;
+  repeated string games = 2;
+  
 }
 

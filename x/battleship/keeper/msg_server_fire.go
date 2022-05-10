@@ -16,6 +16,10 @@ func (k msgServer) Fire(goCtx context.Context, msg *types.MsgFire) (*types.MsgFi
 		return nil, types.ErrCantFindGameById
 	}
 
+	if game.Ended {
+		return nil, types.ErrEndedGame
+	}
+
 	if game.FieldA == "" || game.FieldB == "" {
 		return nil, types.ErrPlayerFieldIsEmpty
 	}
@@ -32,6 +36,11 @@ func (k msgServer) Fire(goCtx context.Context, msg *types.MsgFire) (*types.MsgFi
 	setOpponentField(&game, msg.Creator, field)
 	if resp.Status != rules.HitStatus && resp.Status != rules.KillStatus {
 		game.Turn = getOpponent(&game, msg.Creator)
+	}
+	if resp.Win {
+		game.Ended = true
+		k.Keeper.removeActiveGame(ctx, game.PlayerA, game.Index)
+		k.Keeper.removeActiveGame(ctx, game.PlayerB, game.Index)
 	}
 	k.Keeper.SetExistingGames(ctx, game)
 

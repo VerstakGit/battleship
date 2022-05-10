@@ -4,15 +4,17 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgSetField } from "./types/battleship/tx";
-import { MsgCreateGame } from "./types/battleship/tx";
 import { MsgFire } from "./types/battleship/tx";
+import { MsgActiveGames } from "./types/battleship/tx";
+import { MsgCreateGame } from "./types/battleship/tx";
+import { MsgSetField } from "./types/battleship/tx";
 
 
 const types = [
-  ["/verstakgit.battleship.battleship.MsgSetField", MsgSetField],
-  ["/verstakgit.battleship.battleship.MsgCreateGame", MsgCreateGame],
   ["/verstakgit.battleship.battleship.MsgFire", MsgFire],
+  ["/verstakgit.battleship.battleship.MsgActiveGames", MsgActiveGames],
+  ["/verstakgit.battleship.battleship.MsgCreateGame", MsgCreateGame],
+  ["/verstakgit.battleship.battleship.MsgSetField", MsgSetField],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -45,9 +47,10 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgSetField: (data: MsgSetField): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgSetField", value: MsgSetField.fromPartial( data ) }),
-    msgCreateGame: (data: MsgCreateGame): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgCreateGame", value: MsgCreateGame.fromPartial( data ) }),
     msgFire: (data: MsgFire): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgFire", value: MsgFire.fromPartial( data ) }),
+    msgActiveGames: (data: MsgActiveGames): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgActiveGames", value: MsgActiveGames.fromPartial( data ) }),
+    msgCreateGame: (data: MsgCreateGame): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgCreateGame", value: MsgCreateGame.fromPartial( data ) }),
+    msgSetField: (data: MsgSetField): EncodeObject => ({ typeUrl: "/verstakgit.battleship.battleship.MsgSetField", value: MsgSetField.fromPartial( data ) }),
     
   };
 };

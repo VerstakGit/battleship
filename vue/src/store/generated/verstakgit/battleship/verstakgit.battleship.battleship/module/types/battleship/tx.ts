@@ -34,6 +34,22 @@ export interface MsgFireResponse {
   opponentField: string;
 }
 
+export interface MsgActiveGames {
+  creator: string;
+}
+
+export interface MsgActiveGamesResponse {
+  games: Game[];
+}
+
+export interface Game {
+  playerA: string;
+  playerB: string;
+  fieldA: string;
+  fieldB: string;
+  turn: string;
+}
+
 const baseMsgCreateGame: object = { creator: "", opponent: "" };
 
 export const MsgCreateGame = {
@@ -493,12 +509,264 @@ export const MsgFireResponse = {
   },
 };
 
+const baseMsgActiveGames: object = { creator: "" };
+
+export const MsgActiveGames = {
+  encode(message: MsgActiveGames, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgActiveGames {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgActiveGames } as MsgActiveGames;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgActiveGames {
+    const message = { ...baseMsgActiveGames } as MsgActiveGames;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgActiveGames): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgActiveGames>): MsgActiveGames {
+    const message = { ...baseMsgActiveGames } as MsgActiveGames;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgActiveGamesResponse: object = {};
+
+export const MsgActiveGamesResponse = {
+  encode(
+    message: MsgActiveGamesResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.games) {
+      Game.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgActiveGamesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgActiveGamesResponse } as MsgActiveGamesResponse;
+    message.games = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.games.push(Game.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgActiveGamesResponse {
+    const message = { ...baseMsgActiveGamesResponse } as MsgActiveGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(Game.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: MsgActiveGamesResponse): unknown {
+    const obj: any = {};
+    if (message.games) {
+      obj.games = message.games.map((e) => (e ? Game.toJSON(e) : undefined));
+    } else {
+      obj.games = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgActiveGamesResponse>
+  ): MsgActiveGamesResponse {
+    const message = { ...baseMsgActiveGamesResponse } as MsgActiveGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(Game.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
+const baseGame: object = {
+  playerA: "",
+  playerB: "",
+  fieldA: "",
+  fieldB: "",
+  turn: "",
+};
+
+export const Game = {
+  encode(message: Game, writer: Writer = Writer.create()): Writer {
+    if (message.playerA !== "") {
+      writer.uint32(10).string(message.playerA);
+    }
+    if (message.playerB !== "") {
+      writer.uint32(18).string(message.playerB);
+    }
+    if (message.fieldA !== "") {
+      writer.uint32(26).string(message.fieldA);
+    }
+    if (message.fieldB !== "") {
+      writer.uint32(34).string(message.fieldB);
+    }
+    if (message.turn !== "") {
+      writer.uint32(42).string(message.turn);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Game {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseGame } as Game;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.playerA = reader.string();
+          break;
+        case 2:
+          message.playerB = reader.string();
+          break;
+        case 3:
+          message.fieldA = reader.string();
+          break;
+        case 4:
+          message.fieldB = reader.string();
+          break;
+        case 5:
+          message.turn = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Game {
+    const message = { ...baseGame } as Game;
+    if (object.playerA !== undefined && object.playerA !== null) {
+      message.playerA = String(object.playerA);
+    } else {
+      message.playerA = "";
+    }
+    if (object.playerB !== undefined && object.playerB !== null) {
+      message.playerB = String(object.playerB);
+    } else {
+      message.playerB = "";
+    }
+    if (object.fieldA !== undefined && object.fieldA !== null) {
+      message.fieldA = String(object.fieldA);
+    } else {
+      message.fieldA = "";
+    }
+    if (object.fieldB !== undefined && object.fieldB !== null) {
+      message.fieldB = String(object.fieldB);
+    } else {
+      message.fieldB = "";
+    }
+    if (object.turn !== undefined && object.turn !== null) {
+      message.turn = String(object.turn);
+    } else {
+      message.turn = "";
+    }
+    return message;
+  },
+
+  toJSON(message: Game): unknown {
+    const obj: any = {};
+    message.playerA !== undefined && (obj.playerA = message.playerA);
+    message.playerB !== undefined && (obj.playerB = message.playerB);
+    message.fieldA !== undefined && (obj.fieldA = message.fieldA);
+    message.fieldB !== undefined && (obj.fieldB = message.fieldB);
+    message.turn !== undefined && (obj.turn = message.turn);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Game>): Game {
+    const message = { ...baseGame } as Game;
+    if (object.playerA !== undefined && object.playerA !== null) {
+      message.playerA = object.playerA;
+    } else {
+      message.playerA = "";
+    }
+    if (object.playerB !== undefined && object.playerB !== null) {
+      message.playerB = object.playerB;
+    } else {
+      message.playerB = "";
+    }
+    if (object.fieldA !== undefined && object.fieldA !== null) {
+      message.fieldA = object.fieldA;
+    } else {
+      message.fieldA = "";
+    }
+    if (object.fieldB !== undefined && object.fieldB !== null) {
+      message.fieldB = object.fieldB;
+    } else {
+      message.fieldB = "";
+    }
+    if (object.turn !== undefined && object.turn !== null) {
+      message.turn = object.turn;
+    } else {
+      message.turn = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateGame(request: MsgCreateGame): Promise<MsgCreateGameResponse>;
   SetField(request: MsgSetField): Promise<MsgSetFieldResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   Fire(request: MsgFire): Promise<MsgFireResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  ActiveGames(request: MsgActiveGames): Promise<MsgActiveGamesResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -536,6 +804,18 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) => MsgFireResponse.decode(new Reader(data)));
+  }
+
+  ActiveGames(request: MsgActiveGames): Promise<MsgActiveGamesResponse> {
+    const data = MsgActiveGames.encode(request).finish();
+    const promise = this.rpc.request(
+      "verstakgit.battleship.battleship.Msg",
+      "ActiveGames",
+      data
+    );
+    return promise.then((data) =>
+      MsgActiveGamesResponse.decode(new Reader(data))
+    );
   }
 }
 

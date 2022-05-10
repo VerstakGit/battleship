@@ -33,6 +33,14 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "1",
 					},
 				},
+				ActiveGamesByUserList: []types.ActiveGamesByUser{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -41,6 +49,20 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "duplicated existingGames",
 			genState: &types.GenesisState{
 				ExistingGamesList: []types.ExistingGames{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated activeGamesByUser",
+			genState: &types.GenesisState{
+				ActiveGamesByUserList: []types.ActiveGamesByUser{
 					{
 						Index: "0",
 					},

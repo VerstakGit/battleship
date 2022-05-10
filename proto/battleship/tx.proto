@@ -10,6 +10,7 @@ service Msg {
       rpc CreateGame(MsgCreateGame) returns (MsgCreateGameResponse);
   rpc SetField(MsgSetField) returns (MsgSetFieldResponse);
   rpc Fire(MsgFire) returns (MsgFireResponse);
+  rpc ActiveGames(MsgActiveGames) returns (MsgActiveGamesResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -43,5 +44,22 @@ message MsgFireResponse {
   bool win = 2;
   string opponentField = 3;
 }
+
+message MsgActiveGames {
+  string creator = 1;
+}
+
+message MsgActiveGamesResponse {
+  repeated Game games = 1;
+}
+
+message Game {
+  string playerA = 1;
+  string playerB = 2;
+  string fieldA = 3;
+  string fieldB = 4;
+  string turn = 5;
+}
+
 
 // this line is used by starport scaffolding # proto/tx/message

@@ -11,6 +11,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateGame{}, "battleship/CreateGame", nil)
 	cdc.RegisterConcrete(&MsgSetField{}, "battleship/SetField", nil)
 	cdc.RegisterConcrete(&MsgFire{}, "battleship/Fire", nil)
+	cdc.RegisterConcrete(&MsgActiveGames{}, "battleship/ActiveGames", nil)
 	// this line is used by starport scaffolding # 2
 }
 
@@ -23,6 +24,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgFire{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgActiveGames{},
 	)
 	// this line is used by starport scaffolding # 3
 

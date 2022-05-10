@@ -9,6 +9,11 @@
  * ---------------------------------------------------------------
  */
 
+export interface BattleshipActiveGamesByUser {
+  index?: string;
+  games?: string[];
+}
+
 export interface BattleshipExistingGames {
   index?: string;
   playerA?: string;
@@ -16,6 +21,19 @@ export interface BattleshipExistingGames {
   fieldA?: string;
   fieldB?: string;
   turn?: string;
+  ended?: boolean;
+}
+
+export interface BattleshipGame {
+  playerA?: string;
+  playerB?: string;
+  fieldA?: string;
+  fieldB?: string;
+  turn?: string;
+}
+
+export interface BattleshipMsgActiveGamesResponse {
+  games?: BattleshipGame[];
 }
 
 export interface BattleshipMsgCreateGameResponse {
@@ -40,6 +58,21 @@ export interface BattleshipNextGame {
  */
 export type BattleshipParams = object;
 
+export interface BattleshipQueryAllActiveGamesByUserResponse {
+  activeGamesByUser?: BattleshipActiveGamesByUser[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface BattleshipQueryAllExistingGamesResponse {
   existingGames?: BattleshipExistingGames[];
 
@@ -53,6 +86,10 @@ export interface BattleshipQueryAllExistingGamesResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
+}
+
+export interface BattleshipQueryGetActiveGamesByUserResponse {
+  activeGamesByUser?: BattleshipActiveGamesByUser;
 }
 
 export interface BattleshipQueryGetExistingGamesResponse {
@@ -337,10 +374,52 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title battleship/existing_games.proto
+ * @title battleship/active_games_by_user.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActiveGamesByUserAll
+   * @summary Queries a list of ActiveGamesByUser items.
+   * @request GET:/verstakgit/battleship/battleship/active_games_by_user
+   */
+  queryActiveGamesByUserAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<BattleshipQueryAllActiveGamesByUserResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/active_games_by_user`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActiveGamesByUser
+   * @summary Queries a ActiveGamesByUser by index.
+   * @request GET:/verstakgit/battleship/battleship/active_games_by_user/{index}
+   */
+  queryActiveGamesByUser = (index: string, params: RequestParams = {}) =>
+    this.request<BattleshipQueryGetActiveGamesByUserResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/active_games_by_user/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

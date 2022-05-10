@@ -10,6 +10,7 @@ export interface ExistingGames {
   fieldA: string;
   fieldB: string;
   turn: string;
+  ended: boolean;
 }
 
 const baseExistingGames: object = {
@@ -19,6 +20,7 @@ const baseExistingGames: object = {
   fieldA: "",
   fieldB: "",
   turn: "",
+  ended: false,
 };
 
 export const ExistingGames = {
@@ -40,6 +42,9 @@ export const ExistingGames = {
     }
     if (message.turn !== "") {
       writer.uint32(50).string(message.turn);
+    }
+    if (message.ended === true) {
+      writer.uint32(56).bool(message.ended);
     }
     return writer;
   },
@@ -68,6 +73,9 @@ export const ExistingGames = {
           break;
         case 6:
           message.turn = reader.string();
+          break;
+        case 7:
+          message.ended = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -109,6 +117,11 @@ export const ExistingGames = {
     } else {
       message.turn = "";
     }
+    if (object.ended !== undefined && object.ended !== null) {
+      message.ended = Boolean(object.ended);
+    } else {
+      message.ended = false;
+    }
     return message;
   },
 
@@ -120,6 +133,7 @@ export const ExistingGames = {
     message.fieldA !== undefined && (obj.fieldA = message.fieldA);
     message.fieldB !== undefined && (obj.fieldB = message.fieldB);
     message.turn !== undefined && (obj.turn = message.turn);
+    message.ended !== undefined && (obj.ended = message.ended);
     return obj;
   },
 
@@ -154,6 +168,11 @@ export const ExistingGames = {
       message.turn = object.turn;
     } else {
       message.turn = "";
+    }
+    if (object.ended !== undefined && object.ended !== null) {
+      message.ended = object.ended;
+    } else {
+      message.ended = false;
     }
     return message;
   },

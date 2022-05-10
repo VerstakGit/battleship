@@ -1,11 +1,13 @@
 import { txClient, queryClient, MissingWalletError , registry} from './module'
 
+import { ActiveGamesByUser } from "./module/types/battleship/active_games_by_user"
 import { ExistingGames } from "./module/types/battleship/existing_games"
 import { NextGame } from "./module/types/battleship/next_game"
 import { Params } from "./module/types/battleship/params"
+import { Game } from "./module/types/battleship/tx"
 
 
-export { ExistingGames, NextGame, Params };
+export { ActiveGamesByUser, ExistingGames, NextGame, Params, Game };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -47,11 +49,15 @@ const getDefaultState = () => {
 				NextGame: {},
 				ExistingGames: {},
 				ExistingGamesAll: {},
+				ActiveGamesByUser: {},
+				ActiveGamesByUserAll: {},
 				
 				_Structure: {
+						ActiveGamesByUser: getStructure(ActiveGamesByUser.fromPartial({})),
 						ExistingGames: getStructure(ExistingGames.fromPartial({})),
 						NextGame: getStructure(NextGame.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
+						Game: getStructure(Game.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -103,6 +109,18 @@ export default {
 						(<any> params).query=null
 					}
 			return state.ExistingGamesAll[JSON.stringify(params)] ?? {}
+		},
+				getActiveGamesByUser: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.ActiveGamesByUser[JSON.stringify(params)] ?? {}
+		},
+				getActiveGamesByUserAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.ActiveGamesByUserAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -230,18 +248,81 @@ export default {
 		},
 		
 		
-		async sendMsgSetField({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		
+		 		
+		
+		
+		async QueryActiveGamesByUser({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryActiveGamesByUser( key.index)).data
+				
+					
+				commit('QUERY', { query: 'ActiveGamesByUser', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryActiveGamesByUser', payload: { options: { all }, params: {...key},query }})
+				return getters['getActiveGamesByUser']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryActiveGamesByUser API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryActiveGamesByUserAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryActiveGamesByUserAll(query)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await queryClient.queryActiveGamesByUserAll({...query, 'pagination.key':(<any> value).pagination.next_key})).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'ActiveGamesByUserAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryActiveGamesByUserAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getActiveGamesByUserAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryActiveGamesByUserAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		async sendMsgFire({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgSetField(value)
+				const msg = await txClient.msgFire(value)
 				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
 	gas: "200000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgSetField:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgFire:Init Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new Error('TxClient:MsgSetField:Send Could not broadcast Tx: '+ e.message)
+					throw new Error('TxClient:MsgFire:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgActiveGames({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgActiveGames(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgActiveGames:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgActiveGames:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -260,32 +341,45 @@ export default {
 				}
 			}
 		},
-		async sendMsgFire({ rootGetters }, { value, fee = [], memo = '' }) {
+		async sendMsgSetField({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgFire(value)
+				const msg = await txClient.msgSetField(value)
 				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
 	gas: "200000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgFire:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgSetField:Init Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new Error('TxClient:MsgFire:Send Could not broadcast Tx: '+ e.message)
+					throw new Error('TxClient:MsgSetField:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
 		
-		async MsgSetField({ rootGetters }, { value }) {
+		async MsgFire({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgSetField(value)
+				const msg = await txClient.msgFire(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgSetField:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgFire:Init Could not initialize signing client. Wallet is required.')
 				} else{
-					throw new Error('TxClient:MsgSetField:Create Could not create message: ' + e.message)
+					throw new Error('TxClient:MsgFire:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgActiveGames({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgActiveGames(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgActiveGames:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgActiveGames:Create Could not create message: ' + e.message)
 				}
 			}
 		},
@@ -302,16 +396,16 @@ export default {
 				}
 			}
 		},
-		async MsgFire({ rootGetters }, { value }) {
+		async MsgSetField({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgFire(value)
+				const msg = await txClient.msgSetField(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgFire:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgSetField:Init Could not initialize signing client. Wallet is required.')
 				} else{
-					throw new Error('TxClient:MsgFire:Create Could not create message: ' + e.message)
+					throw new Error('TxClient:MsgSetField:Create Could not create message: ' + e.message)
 				}
 			}
 		},

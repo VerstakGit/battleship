@@ -28,4 +28,6 @@ var (
 	ErrCantFireInTheSamePlace = sdkerrors.Register(ModuleName, 1117, "you can not fire to the same place")
 	ErrUnknownCell            = sdkerrors.Register(ModuleName, 1118, "unknown field cell")
 	ErrPlayerFieldIsEmpty     = sdkerrors.Register(ModuleName, 1119, "all players should set their fields first")
+	ErrEndedGame              = sdkerrors.Register(ModuleName, 1120, "the game is already ended")
+	ErrUserHasNoActiveGames   = sdkerrors.Register(ModuleName, 1121, "user has no active games")
 )

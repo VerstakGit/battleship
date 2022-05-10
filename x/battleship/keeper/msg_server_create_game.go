@@ -37,6 +37,9 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 	nextGame.IdVal++
 	k.Keeper.SetNextGame(ctx, nextGame)
 
+	k.Keeper.addActiveGame(ctx, msg.Creator, nextGameIndex)
+	k.Keeper.addActiveGame(ctx, msg.Opponent, nextGameIndex)
+
 	return &types.MsgCreateGameResponse{
 		IdVal: nextGameIndex,
 	}, nil

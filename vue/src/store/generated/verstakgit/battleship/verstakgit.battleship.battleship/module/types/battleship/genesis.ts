@@ -2,6 +2,7 @@
 import { Params } from "../battleship/params";
 import { NextGame } from "../battleship/next_game";
 import { ExistingGames } from "../battleship/existing_games";
+import { ActiveGamesByUser } from "../battleship/active_games_by_user";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "verstakgit.battleship.battleship";
@@ -10,8 +11,9 @@ export const protobufPackage = "verstakgit.battleship.battleship";
 export interface GenesisState {
   params: Params | undefined;
   nextGame: NextGame | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   existingGamesList: ExistingGames[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  activeGamesByUserList: ActiveGamesByUser[];
 }
 
 const baseGenesisState: object = {};
@@ -27,6 +29,9 @@ export const GenesisState = {
     for (const v of message.existingGamesList) {
       ExistingGames.encode(v!, writer.uint32(26).fork()).ldelim();
     }
+    for (const v of message.activeGamesByUserList) {
+      ActiveGamesByUser.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -35,6 +40,7 @@ export const GenesisState = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
+    message.activeGamesByUserList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -49,6 +55,11 @@ export const GenesisState = {
             ExistingGames.decode(reader, reader.uint32())
           );
           break;
+        case 4:
+          message.activeGamesByUserList.push(
+            ActiveGamesByUser.decode(reader, reader.uint32())
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -60,6 +71,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
+    message.activeGamesByUserList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -76,6 +88,14 @@ export const GenesisState = {
     ) {
       for (const e of object.existingGamesList) {
         message.existingGamesList.push(ExistingGames.fromJSON(e));
+      }
+    }
+    if (
+      object.activeGamesByUserList !== undefined &&
+      object.activeGamesByUserList !== null
+    ) {
+      for (const e of object.activeGamesByUserList) {
+        message.activeGamesByUserList.push(ActiveGamesByUser.fromJSON(e));
       }
     }
     return message;
@@ -96,12 +116,20 @@ export const GenesisState = {
     } else {
       obj.existingGamesList = [];
     }
+    if (message.activeGamesByUserList) {
+      obj.activeGamesByUserList = message.activeGamesByUserList.map((e) =>
+        e ? ActiveGamesByUser.toJSON(e) : undefined
+      );
+    } else {
+      obj.activeGamesByUserList = [];
+    }
     return obj;
   },
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
+    message.activeGamesByUserList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -118,6 +146,14 @@ export const GenesisState = {
     ) {
       for (const e of object.existingGamesList) {
         message.existingGamesList.push(ExistingGames.fromPartial(e));
+      }
+    }
+    if (
+      object.activeGamesByUserList !== undefined &&
+      object.activeGamesByUserList !== null
+    ) {
+      for (const e of object.activeGamesByUserList) {
+        message.activeGamesByUserList.push(ActiveGamesByUser.fromPartial(e));
       }
     }
     return message;
