@@ -30,6 +30,10 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	cmd.AddCommand(CmdShowExistingGames())
 	cmd.AddCommand(CmdListActiveGamesByUser())
 	cmd.AddCommand(CmdShowActiveGamesByUser())
+	cmd.AddCommand(CmdGetFinishedGames())
+
+	cmd.AddCommand(CmdListFinishedGamesByUser())
+	cmd.AddCommand(CmdShowFinishedGamesByUser())
 	// this line is used by starport scaffolding # 1
 
 	return cmd

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package verstakgit.battleship.battleship;
+
+option go_package = "github.com/verstakgit/battleship/x/battleship/types";
+
+message FinishedGamesByUser {
+  string index = 1; 
+  repeated string games = 2;
+  
+}
+

@@ -2,12 +2,13 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { ActiveGamesByUser } from "./module/types/battleship/active_games_by_user"
 import { ExistingGames } from "./module/types/battleship/existing_games"
+import { FinishedGamesByUser } from "./module/types/battleship/finished_games_by_user"
 import { NextGame } from "./module/types/battleship/next_game"
 import { Params } from "./module/types/battleship/params"
 import { Game } from "./module/types/battleship/tx"
 
 
-export { ActiveGamesByUser, ExistingGames, NextGame, Params, Game };
+export { ActiveGamesByUser, ExistingGames, FinishedGamesByUser, NextGame, Params, Game };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -51,10 +52,14 @@ const getDefaultState = () => {
 				ExistingGamesAll: {},
 				ActiveGamesByUser: {},
 				ActiveGamesByUserAll: {},
+				GetFinishedGames: {},
+				FinishedGamesByUser: {},
+				FinishedGamesByUserAll: {},
 				
 				_Structure: {
 						ActiveGamesByUser: getStructure(ActiveGamesByUser.fromPartial({})),
 						ExistingGames: getStructure(ExistingGames.fromPartial({})),
+						FinishedGamesByUser: getStructure(FinishedGamesByUser.fromPartial({})),
 						NextGame: getStructure(NextGame.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						Game: getStructure(Game.fromPartial({})),
@@ -121,6 +126,24 @@ export default {
 						(<any> params).query=null
 					}
 			return state.ActiveGamesByUserAll[JSON.stringify(params)] ?? {}
+		},
+				getGetFinishedGames: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.GetFinishedGames[JSON.stringify(params)] ?? {}
+		},
+				getFinishedGamesByUser: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.FinishedGamesByUser[JSON.stringify(params)] ?? {}
+		},
+				getFinishedGamesByUserAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.FinishedGamesByUserAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -296,6 +319,91 @@ export default {
 		},
 		
 		
+		
+		
+		 		
+		
+		
+		async QueryGetFinishedGames({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryGetFinishedGames( key.playerID)).data
+				
+					
+				commit('QUERY', { query: 'GetFinishedGames', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryGetFinishedGames', payload: { options: { all }, params: {...key},query }})
+				return getters['getGetFinishedGames']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryGetFinishedGames API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryFinishedGamesByUser({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryFinishedGamesByUser( key.index)).data
+				
+					
+				commit('QUERY', { query: 'FinishedGamesByUser', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryFinishedGamesByUser', payload: { options: { all }, params: {...key},query }})
+				return getters['getFinishedGamesByUser']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryFinishedGamesByUser API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryFinishedGamesByUserAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryFinishedGamesByUserAll(query)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await queryClient.queryFinishedGamesByUserAll({...query, 'pagination.key':(<any> value).pagination.next_key})).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'FinishedGamesByUserAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryFinishedGamesByUserAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getFinishedGamesByUserAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryFinishedGamesByUserAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		async sendMsgCreateGame({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgCreateGame(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgCreateGame:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		async sendMsgFire({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -326,21 +434,6 @@ export default {
 				}
 			}
 		},
-		async sendMsgCreateGame({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgCreateGame(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgCreateGame:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
 		async sendMsgSetField({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -357,6 +450,19 @@ export default {
 			}
 		},
 		
+		async MsgCreateGame({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgCreateGame(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgCreateGame:Create Could not create message: ' + e.message)
+				}
+			}
+		},
 		async MsgFire({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -380,19 +486,6 @@ export default {
 					throw new Error('TxClient:MsgActiveGames:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgActiveGames:Create Could not create message: ' + e.message)
-				}
-			}
-		},
-		async MsgCreateGame({ rootGetters }, { value }) {
-			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgCreateGame(value)
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgCreateGame:Create Could not create message: ' + e.message)
 				}
 			}
 		},

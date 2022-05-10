@@ -30,4 +30,5 @@ var (
 	ErrPlayerFieldIsEmpty     = sdkerrors.Register(ModuleName, 1119, "all players should set their fields first")
 	ErrEndedGame              = sdkerrors.Register(ModuleName, 1120, "the game is already ended")
 	ErrUserHasNoActiveGames   = sdkerrors.Register(ModuleName, 1121, "user has no active games")
+	ErrUserHasNoFinishedGames = sdkerrors.Register(ModuleName, 1122, "user has no finished games")
 )

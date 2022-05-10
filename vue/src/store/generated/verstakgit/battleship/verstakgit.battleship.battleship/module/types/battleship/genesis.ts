@@ -3,6 +3,7 @@ import { Params } from "../battleship/params";
 import { NextGame } from "../battleship/next_game";
 import { ExistingGames } from "../battleship/existing_games";
 import { ActiveGamesByUser } from "../battleship/active_games_by_user";
+import { FinishedGamesByUser } from "../battleship/finished_games_by_user";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "verstakgit.battleship.battleship";
@@ -12,8 +13,9 @@ export interface GenesisState {
   params: Params | undefined;
   nextGame: NextGame | undefined;
   existingGamesList: ExistingGames[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   activeGamesByUserList: ActiveGamesByUser[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  finishedGamesByUserList: FinishedGamesByUser[];
 }
 
 const baseGenesisState: object = {};
@@ -32,6 +34,9 @@ export const GenesisState = {
     for (const v of message.activeGamesByUserList) {
       ActiveGamesByUser.encode(v!, writer.uint32(34).fork()).ldelim();
     }
+    for (const v of message.finishedGamesByUserList) {
+      FinishedGamesByUser.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -41,6 +46,7 @@ export const GenesisState = {
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
     message.activeGamesByUserList = [];
+    message.finishedGamesByUserList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -60,6 +66,11 @@ export const GenesisState = {
             ActiveGamesByUser.decode(reader, reader.uint32())
           );
           break;
+        case 5:
+          message.finishedGamesByUserList.push(
+            FinishedGamesByUser.decode(reader, reader.uint32())
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -72,6 +83,7 @@ export const GenesisState = {
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
     message.activeGamesByUserList = [];
+    message.finishedGamesByUserList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -96,6 +108,14 @@ export const GenesisState = {
     ) {
       for (const e of object.activeGamesByUserList) {
         message.activeGamesByUserList.push(ActiveGamesByUser.fromJSON(e));
+      }
+    }
+    if (
+      object.finishedGamesByUserList !== undefined &&
+      object.finishedGamesByUserList !== null
+    ) {
+      for (const e of object.finishedGamesByUserList) {
+        message.finishedGamesByUserList.push(FinishedGamesByUser.fromJSON(e));
       }
     }
     return message;
@@ -123,6 +143,13 @@ export const GenesisState = {
     } else {
       obj.activeGamesByUserList = [];
     }
+    if (message.finishedGamesByUserList) {
+      obj.finishedGamesByUserList = message.finishedGamesByUserList.map((e) =>
+        e ? FinishedGamesByUser.toJSON(e) : undefined
+      );
+    } else {
+      obj.finishedGamesByUserList = [];
+    }
     return obj;
   },
 
@@ -130,6 +157,7 @@ export const GenesisState = {
     const message = { ...baseGenesisState } as GenesisState;
     message.existingGamesList = [];
     message.activeGamesByUserList = [];
+    message.finishedGamesByUserList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -154,6 +182,16 @@ export const GenesisState = {
     ) {
       for (const e of object.activeGamesByUserList) {
         message.activeGamesByUserList.push(ActiveGamesByUser.fromPartial(e));
+      }
+    }
+    if (
+      object.finishedGamesByUserList !== undefined &&
+      object.finishedGamesByUserList !== null
+    ) {
+      for (const e of object.finishedGamesByUserList) {
+        message.finishedGamesByUserList.push(
+          FinishedGamesByUser.fromPartial(e)
+        );
       }
     }
     return message;

@@ -24,6 +24,11 @@ export interface BattleshipExistingGames {
   ended?: boolean;
 }
 
+export interface BattleshipFinishedGamesByUser {
+  index?: string;
+  games?: string[];
+}
+
 export interface BattleshipGame {
   playerA?: string;
   playerB?: string;
@@ -88,12 +93,35 @@ export interface BattleshipQueryAllExistingGamesResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface BattleshipQueryAllFinishedGamesByUserResponse {
+  finishedGamesByUser?: BattleshipFinishedGamesByUser[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface BattleshipQueryGetActiveGamesByUserResponse {
   activeGamesByUser?: BattleshipActiveGamesByUser;
 }
 
 export interface BattleshipQueryGetExistingGamesResponse {
   existingGames?: BattleshipExistingGames;
+}
+
+export interface BattleshipQueryGetFinishedGamesByUserResponse {
+  finishedGamesByUser?: BattleshipFinishedGamesByUser;
+}
+
+export interface BattleshipQueryGetFinishedGamesResponse {
+  games?: BattleshipGame[];
 }
 
 export interface BattleshipQueryGetNextGameResponse {
@@ -457,6 +485,64 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryExistingGames = (index: string, params: RequestParams = {}) =>
     this.request<BattleshipQueryGetExistingGamesResponse, RpcStatus>({
       path: `/verstakgit/battleship/battleship/existing_games/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryFinishedGamesByUserAll
+   * @summary Queries a list of FinishedGamesByUser items.
+   * @request GET:/verstakgit/battleship/battleship/finished_games_by_user
+   */
+  queryFinishedGamesByUserAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<BattleshipQueryAllFinishedGamesByUserResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/finished_games_by_user`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryFinishedGamesByUser
+   * @summary Queries a FinishedGamesByUser by index.
+   * @request GET:/verstakgit/battleship/battleship/finished_games_by_user/{index}
+   */
+  queryFinishedGamesByUser = (index: string, params: RequestParams = {}) =>
+    this.request<BattleshipQueryGetFinishedGamesByUserResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/finished_games_by_user/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetFinishedGames
+   * @summary Queries a list of GetFinishedGames items.
+   * @request GET:/verstakgit/battleship/battleship/get_finished_games/{playerID}
+   */
+  queryGetFinishedGames = (playerID: string, params: RequestParams = {}) =>
+    this.request<BattleshipQueryGetFinishedGamesResponse, RpcStatus>({
+      path: `/verstakgit/battleship/battleship/get_finished_games/${playerID}`,
       method: "GET",
       format: "json",
       ...params,

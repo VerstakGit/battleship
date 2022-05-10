@@ -8,6 +8,8 @@ import {
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
 import { ActiveGamesByUser } from "../battleship/active_games_by_user";
+import { Game } from "../battleship/tx";
+import { FinishedGamesByUser } from "../battleship/finished_games_by_user";
 
 export const protobufPackage = "verstakgit.battleship.battleship";
 
@@ -57,6 +59,31 @@ export interface QueryAllActiveGamesByUserRequest {
 
 export interface QueryAllActiveGamesByUserResponse {
   activeGamesByUser: ActiveGamesByUser[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetFinishedGamesRequest {
+  playerID: string;
+}
+
+export interface QueryGetFinishedGamesResponse {
+  games: Game[];
+}
+
+export interface QueryGetFinishedGamesByUserRequest {
+  index: string;
+}
+
+export interface QueryGetFinishedGamesByUserResponse {
+  finishedGamesByUser: FinishedGamesByUser | undefined;
+}
+
+export interface QueryAllFinishedGamesByUserRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllFinishedGamesByUserResponse {
+  finishedGamesByUser: FinishedGamesByUser[];
   pagination: PageResponse | undefined;
 }
 
@@ -932,6 +959,489 @@ export const QueryAllActiveGamesByUserResponse = {
   },
 };
 
+const baseQueryGetFinishedGamesRequest: object = { playerID: "" };
+
+export const QueryGetFinishedGamesRequest = {
+  encode(
+    message: QueryGetFinishedGamesRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.playerID !== "") {
+      writer.uint32(10).string(message.playerID);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetFinishedGamesRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetFinishedGamesRequest,
+    } as QueryGetFinishedGamesRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.playerID = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetFinishedGamesRequest {
+    const message = {
+      ...baseQueryGetFinishedGamesRequest,
+    } as QueryGetFinishedGamesRequest;
+    if (object.playerID !== undefined && object.playerID !== null) {
+      message.playerID = String(object.playerID);
+    } else {
+      message.playerID = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetFinishedGamesRequest): unknown {
+    const obj: any = {};
+    message.playerID !== undefined && (obj.playerID = message.playerID);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetFinishedGamesRequest>
+  ): QueryGetFinishedGamesRequest {
+    const message = {
+      ...baseQueryGetFinishedGamesRequest,
+    } as QueryGetFinishedGamesRequest;
+    if (object.playerID !== undefined && object.playerID !== null) {
+      message.playerID = object.playerID;
+    } else {
+      message.playerID = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetFinishedGamesResponse: object = {};
+
+export const QueryGetFinishedGamesResponse = {
+  encode(
+    message: QueryGetFinishedGamesResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.games) {
+      Game.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetFinishedGamesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetFinishedGamesResponse,
+    } as QueryGetFinishedGamesResponse;
+    message.games = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.games.push(Game.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetFinishedGamesResponse {
+    const message = {
+      ...baseQueryGetFinishedGamesResponse,
+    } as QueryGetFinishedGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(Game.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetFinishedGamesResponse): unknown {
+    const obj: any = {};
+    if (message.games) {
+      obj.games = message.games.map((e) => (e ? Game.toJSON(e) : undefined));
+    } else {
+      obj.games = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetFinishedGamesResponse>
+  ): QueryGetFinishedGamesResponse {
+    const message = {
+      ...baseQueryGetFinishedGamesResponse,
+    } as QueryGetFinishedGamesResponse;
+    message.games = [];
+    if (object.games !== undefined && object.games !== null) {
+      for (const e of object.games) {
+        message.games.push(Game.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
+const baseQueryGetFinishedGamesByUserRequest: object = { index: "" };
+
+export const QueryGetFinishedGamesByUserRequest = {
+  encode(
+    message: QueryGetFinishedGamesByUserRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.index !== "") {
+      writer.uint32(10).string(message.index);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetFinishedGamesByUserRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetFinishedGamesByUserRequest,
+    } as QueryGetFinishedGamesByUserRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.index = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetFinishedGamesByUserRequest {
+    const message = {
+      ...baseQueryGetFinishedGamesByUserRequest,
+    } as QueryGetFinishedGamesByUserRequest;
+    if (object.index !== undefined && object.index !== null) {
+      message.index = String(object.index);
+    } else {
+      message.index = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetFinishedGamesByUserRequest): unknown {
+    const obj: any = {};
+    message.index !== undefined && (obj.index = message.index);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetFinishedGamesByUserRequest>
+  ): QueryGetFinishedGamesByUserRequest {
+    const message = {
+      ...baseQueryGetFinishedGamesByUserRequest,
+    } as QueryGetFinishedGamesByUserRequest;
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    } else {
+      message.index = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetFinishedGamesByUserResponse: object = {};
+
+export const QueryGetFinishedGamesByUserResponse = {
+  encode(
+    message: QueryGetFinishedGamesByUserResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.finishedGamesByUser !== undefined) {
+      FinishedGamesByUser.encode(
+        message.finishedGamesByUser,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetFinishedGamesByUserResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetFinishedGamesByUserResponse,
+    } as QueryGetFinishedGamesByUserResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.finishedGamesByUser = FinishedGamesByUser.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetFinishedGamesByUserResponse {
+    const message = {
+      ...baseQueryGetFinishedGamesByUserResponse,
+    } as QueryGetFinishedGamesByUserResponse;
+    if (
+      object.finishedGamesByUser !== undefined &&
+      object.finishedGamesByUser !== null
+    ) {
+      message.finishedGamesByUser = FinishedGamesByUser.fromJSON(
+        object.finishedGamesByUser
+      );
+    } else {
+      message.finishedGamesByUser = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetFinishedGamesByUserResponse): unknown {
+    const obj: any = {};
+    message.finishedGamesByUser !== undefined &&
+      (obj.finishedGamesByUser = message.finishedGamesByUser
+        ? FinishedGamesByUser.toJSON(message.finishedGamesByUser)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetFinishedGamesByUserResponse>
+  ): QueryGetFinishedGamesByUserResponse {
+    const message = {
+      ...baseQueryGetFinishedGamesByUserResponse,
+    } as QueryGetFinishedGamesByUserResponse;
+    if (
+      object.finishedGamesByUser !== undefined &&
+      object.finishedGamesByUser !== null
+    ) {
+      message.finishedGamesByUser = FinishedGamesByUser.fromPartial(
+        object.finishedGamesByUser
+      );
+    } else {
+      message.finishedGamesByUser = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllFinishedGamesByUserRequest: object = {};
+
+export const QueryAllFinishedGamesByUserRequest = {
+  encode(
+    message: QueryAllFinishedGamesByUserRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllFinishedGamesByUserRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllFinishedGamesByUserRequest,
+    } as QueryAllFinishedGamesByUserRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllFinishedGamesByUserRequest {
+    const message = {
+      ...baseQueryAllFinishedGamesByUserRequest,
+    } as QueryAllFinishedGamesByUserRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllFinishedGamesByUserRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllFinishedGamesByUserRequest>
+  ): QueryAllFinishedGamesByUserRequest {
+    const message = {
+      ...baseQueryAllFinishedGamesByUserRequest,
+    } as QueryAllFinishedGamesByUserRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllFinishedGamesByUserResponse: object = {};
+
+export const QueryAllFinishedGamesByUserResponse = {
+  encode(
+    message: QueryAllFinishedGamesByUserResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.finishedGamesByUser) {
+      FinishedGamesByUser.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllFinishedGamesByUserResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllFinishedGamesByUserResponse,
+    } as QueryAllFinishedGamesByUserResponse;
+    message.finishedGamesByUser = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.finishedGamesByUser.push(
+            FinishedGamesByUser.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllFinishedGamesByUserResponse {
+    const message = {
+      ...baseQueryAllFinishedGamesByUserResponse,
+    } as QueryAllFinishedGamesByUserResponse;
+    message.finishedGamesByUser = [];
+    if (
+      object.finishedGamesByUser !== undefined &&
+      object.finishedGamesByUser !== null
+    ) {
+      for (const e of object.finishedGamesByUser) {
+        message.finishedGamesByUser.push(FinishedGamesByUser.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllFinishedGamesByUserResponse): unknown {
+    const obj: any = {};
+    if (message.finishedGamesByUser) {
+      obj.finishedGamesByUser = message.finishedGamesByUser.map((e) =>
+        e ? FinishedGamesByUser.toJSON(e) : undefined
+      );
+    } else {
+      obj.finishedGamesByUser = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllFinishedGamesByUserResponse>
+  ): QueryAllFinishedGamesByUserResponse {
+    const message = {
+      ...baseQueryAllFinishedGamesByUserResponse,
+    } as QueryAllFinishedGamesByUserResponse;
+    message.finishedGamesByUser = [];
+    if (
+      object.finishedGamesByUser !== undefined &&
+      object.finishedGamesByUser !== null
+    ) {
+      for (const e of object.finishedGamesByUser) {
+        message.finishedGamesByUser.push(FinishedGamesByUser.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -954,6 +1464,18 @@ export interface Query {
   ActiveGamesByUserAll(
     request: QueryAllActiveGamesByUserRequest
   ): Promise<QueryAllActiveGamesByUserResponse>;
+  /** Queries a list of GetFinishedGames items. */
+  GetFinishedGames(
+    request: QueryGetFinishedGamesRequest
+  ): Promise<QueryGetFinishedGamesResponse>;
+  /** Queries a FinishedGamesByUser by index. */
+  FinishedGamesByUser(
+    request: QueryGetFinishedGamesByUserRequest
+  ): Promise<QueryGetFinishedGamesByUserResponse>;
+  /** Queries a list of FinishedGamesByUser items. */
+  FinishedGamesByUserAll(
+    request: QueryAllFinishedGamesByUserRequest
+  ): Promise<QueryAllFinishedGamesByUserResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1038,6 +1560,48 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllActiveGamesByUserResponse.decode(new Reader(data))
+    );
+  }
+
+  GetFinishedGames(
+    request: QueryGetFinishedGamesRequest
+  ): Promise<QueryGetFinishedGamesResponse> {
+    const data = QueryGetFinishedGamesRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "verstakgit.battleship.battleship.Query",
+      "GetFinishedGames",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetFinishedGamesResponse.decode(new Reader(data))
+    );
+  }
+
+  FinishedGamesByUser(
+    request: QueryGetFinishedGamesByUserRequest
+  ): Promise<QueryGetFinishedGamesByUserResponse> {
+    const data = QueryGetFinishedGamesByUserRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "verstakgit.battleship.battleship.Query",
+      "FinishedGamesByUser",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetFinishedGamesByUserResponse.decode(new Reader(data))
+    );
+  }
+
+  FinishedGamesByUserAll(
+    request: QueryAllFinishedGamesByUserRequest
+  ): Promise<QueryAllFinishedGamesByUserResponse> {
+    const data = QueryAllFinishedGamesByUserRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "verstakgit.battleship.battleship.Query",
+      "FinishedGamesByUserAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllFinishedGamesByUserResponse.decode(new Reader(data))
     );
   }
 }

@@ -6,6 +6,7 @@ import "battleship/params.proto";
 import "battleship/next_game.proto";
 import "battleship/existing_games.proto";
 import "battleship/active_games_by_user.proto";
+import "battleship/finished_games_by_user.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/verstakgit/battleship/x/battleship/types";
@@ -16,5 +17,6 @@ message GenesisState {
   NextGame nextGame = 2;
   repeated ExistingGames existingGamesList = 3 [(gogoproto.nullable) = false];
   repeated ActiveGamesByUser activeGamesByUserList = 4 [(gogoproto.nullable) = false];
+  repeated FinishedGamesByUser finishedGamesByUserList = 5 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

@@ -41,6 +41,8 @@ func (k msgServer) Fire(goCtx context.Context, msg *types.MsgFire) (*types.MsgFi
 		game.Ended = true
 		k.Keeper.removeActiveGame(ctx, game.PlayerA, game.Index)
 		k.Keeper.removeActiveGame(ctx, game.PlayerB, game.Index)
+		k.Keeper.addFinishedGame(ctx, game.PlayerA, game.Index)
+		k.Keeper.addFinishedGame(ctx, game.PlayerB, game.Index)
 	}
 	k.Keeper.SetExistingGames(ctx, game)
 

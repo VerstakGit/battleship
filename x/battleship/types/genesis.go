@@ -13,7 +13,8 @@ func DefaultGenesis() *GenesisState {
 		NextGame: &NextGame{
 			IdVal: 0,
 		},
-		ActiveGamesByUserList: []ActiveGamesByUser{},
+		ActiveGamesByUserList:   []ActiveGamesByUser{},
+		FinishedGamesByUserList: []FinishedGamesByUser{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -31,6 +32,16 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("duplicated index for activeGamesByUser")
 		}
 		activeGamesByUserIndexMap[index] = struct{}{}
+	}
+	// Check for duplicated index in finishedGamesByUser
+	finishedGamesByUserIndexMap := make(map[string]struct{})
+
+	for _, elem := range gs.FinishedGamesByUserList {
+		index := string(FinishedGamesByUserKey(elem.Index))
+		if _, ok := finishedGamesByUserIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for finishedGamesByUser")
+		}
+		finishedGamesByUserIndexMap[index] = struct{}{}
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 

@@ -8,6 +8,8 @@ import "battleship/params.proto";
 import "battleship/next_game.proto";
 import "battleship/existing_games.proto";
 import "battleship/active_games_by_user.proto";
+import "battleship/tx.proto";
+import "battleship/finished_games_by_user.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/verstakgit/battleship/x/battleship/types";
@@ -40,6 +42,21 @@ service Query {
 	// Queries a list of ActiveGamesByUser items.
 	rpc ActiveGamesByUserAll(QueryAllActiveGamesByUserRequest) returns (QueryAllActiveGamesByUserResponse) {
 		option (google.api.http).get = "/verstakgit/battleship/battleship/active_games_by_user";
+	}
+
+// Queries a list of GetFinishedGames items.
+	rpc GetFinishedGames(QueryGetFinishedGamesRequest) returns (QueryGetFinishedGamesResponse) {
+		option (google.api.http).get = "/verstakgit/battleship/battleship/get_finished_games/{playerID}";
+	}
+
+// Queries a FinishedGamesByUser by index.
+	rpc FinishedGamesByUser(QueryGetFinishedGamesByUserRequest) returns (QueryGetFinishedGamesByUserResponse) {
+		option (google.api.http).get = "/verstakgit/battleship/battleship/finished_games_by_user/{index}";
+	}
+
+	// Queries a list of FinishedGamesByUser items.
+	rpc FinishedGamesByUserAll(QueryAllFinishedGamesByUserRequest) returns (QueryAllFinishedGamesByUserResponse) {
+		option (google.api.http).get = "/verstakgit/battleship/battleship/finished_games_by_user";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -92,6 +109,32 @@ message QueryAllActiveGamesByUserRequest {
 
 message QueryAllActiveGamesByUserResponse {
 	repeated ActiveGamesByUser activeGamesByUser = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetFinishedGamesRequest {
+  string playerID = 1;
+}
+
+message QueryGetFinishedGamesResponse {
+  repeated verstakgit.battleship.battleship.Game games = 1;
+}
+
+message QueryGetFinishedGamesByUserRequest {
+	  string index = 1;
+
+}
+
+message QueryGetFinishedGamesByUserResponse {
+	FinishedGamesByUser finishedGamesByUser = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllFinishedGamesByUserRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllFinishedGamesByUserResponse {
+	repeated FinishedGamesByUser finishedGamesByUser = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

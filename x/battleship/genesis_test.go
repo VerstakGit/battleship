@@ -33,6 +33,14 @@ func TestGenesis(t *testing.T) {
 				Index: "1",
 			},
 		},
+		FinishedGamesByUserList: []types.FinishedGamesByUser{
+			{
+				Index: "0",
+			},
+			{
+				Index: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -47,5 +55,6 @@ func TestGenesis(t *testing.T) {
 	require.Equal(t, genesisState.NextGame, got.NextGame)
 	require.ElementsMatch(t, genesisState.ExistingGamesList, got.ExistingGamesList)
 	require.ElementsMatch(t, genesisState.ActiveGamesByUserList, got.ActiveGamesByUserList)
+	require.ElementsMatch(t, genesisState.FinishedGamesByUserList, got.FinishedGamesByUserList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }
